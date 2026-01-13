@@ -62,13 +62,15 @@ export default function ReceivePage() {
             if (useDirectDisk && writable) {
               const flush = async () => {
                 if (chunks.length > 0) {
-                  console.log("Flushing final", chunks.length, "chunks to disk")
-                  for (const chunk of chunks) {
-                    await writable.write(chunk)
+                    console.log("Flushing final", chunks.length, "chunks to disk")
+                    if (writable) {
+                      for (const chunk of chunks) {
+                        await writable.write(chunk)
+                      }
+                    }
+                    chunks.length = 0
                   }
-                  chunks.length = 0
-                }
-                await writable.close()
+                  if (writable) await writable.close()
                 setStatus("Download complete! File saved to disk.")
                 alert("Download complete!")
               }
@@ -106,19 +108,20 @@ export default function ReceivePage() {
               useDirectDisk = fileSize > MEMORY_THRESHOLD_BYTES && supportsDirectWrite
 
               if (useDirectDisk) {
-                setStatus(`Large file → preparing direct disk save...`)
-                window.showSaveFilePicker({
+                setStatus(`Large file → preparing direct disk save...`);
+                (window as any).showSaveFilePicker({
                   suggestedName: localFileName,
                   types: [{ description: "All Files" }],
                 })
-                  .then((handle) => handle.createWritable())
-                  .then((stream) => {
+                  .then((handle: any) => handle.createWritable())
+                  .then((stream: any) => {
                     writable = stream
                     setStatus("Streaming directly to disk...")
 
                     if (chunks.length > 0) {
                       console.log("Flushing early chunks:", chunks.length)
                       const flushEarly = async () => {
+                        if (!writable) return
                         for (const chunk of chunks) {
                           await writable.write(chunk)
                         }
@@ -127,7 +130,7 @@ export default function ReceivePage() {
                       flushEarly().catch((err) => console.error("Early flush error:", err))
                     }
                   })
-                  .catch((err) => {
+                  .catch((err: any) => {
                     console.error("Picker error:", err)
                     useDirectDisk = false
                     writable = null
@@ -195,7 +198,7 @@ export default function ReceivePage() {
         body: JSON.stringify({ type: "answer", code, data: answer })
       })
 
-      ice.forEach((c) => pc.addIceCandidate(c).catch(console.error))
+      ice.forEach((c:any) => pc.addIceCandidate(c).catch(console.error))
     } catch (err) {
       console.error("Connection error:", err)
       setStatus("Connection failed – check console")
