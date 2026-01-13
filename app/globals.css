@@ -1,0 +1,37 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  background-color: #f9fafb;
+}
+
+.header {
+  padding: 1rem;
+  background-color: #1e40af;
+  color: white;
+  text-align: center;
+}
+
+.main {
+  padding: 2rem;
+  max-width: 600px;
+  margin: auto;
+}
+
+.footer {
+  padding: 1rem;
+  text-align: center;
+  background-color: #f3f4f6;
+}
+
+button {
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+}
+
+input {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+}
