@@ -187,7 +187,9 @@ export default function ReceivePage() {
       const res = await fetch(`/api/signal?code=${code}&role=receiver`)
       if (!res.ok) throw new Error(`Signaling failed: ${res.status}`)
       const { offer, ice } = await res.json()
-
+      if (!offer?.sdp) {
+        throw new Error("Invalid SDP received")
+      }
       await pc.setRemoteDescription(offer)
       const answer = await pc.createAnswer()
       await pc.setLocalDescription(answer)

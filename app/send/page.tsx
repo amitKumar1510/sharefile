@@ -108,7 +108,7 @@ export default function SendPage() {
       const timer = setInterval(async () => {
         const res = await fetch(`/api/signal?code=${data.code}&role=sender`)
         const ans = await res.json()
-        if (ans.answer) {
+        if (ans?.answer?.sdp) {
           await pc.setRemoteDescription(ans.answer)
           clearInterval(timer)
         }
