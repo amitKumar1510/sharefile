@@ -42,7 +42,6 @@ export default function ReceivePage() {
       const channel = e.channel
 
       channel.binaryType = "arraybuffer"
-
       channel.onopen = () => console.log("Data channel open on receiver")
       channel.onclose = () => console.log("Data channel closed on receiver")
       channel.onerror = (ev) => console.error("Data channel error on receiver:", ev)
